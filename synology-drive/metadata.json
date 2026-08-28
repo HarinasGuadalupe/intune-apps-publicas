@@ -1,11 +1,11 @@
 {
-  "name": "",
-  "publisher": "",
-  "installer_type": "",
-  "architecture": "",
-  "source_permalink": "",
-  "silent_install_args": "",
-  "silent_uninstall_args": "",
-  "detection_method": "",
-  "notes": ""
+  "name": "Synology Drive Client (4.2.0-20058)",
+  "publisher": "Synology Inc.",
+  "installer_type": "msi",
+  "architecture": "x64",
+  "source_permalink": "https://global.synologydownload.com/download/Utility/SynologyDriveClient/4.2.0-20058/Windows/Installer/x86_64/Synology%20Drive%20Client-4.2.0-20058-x64.msi",
+  "silent_install_args": "/i \"<installer>\" /qn /norestart",
+  "silent_uninstall_args": "msiexec /x {ProductCode} /qn /norestart (ProductCode se obtiene dinamicamente del registro, ver uninstall.ps1)",
+  "detection_method": "registry: HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\* (y WOW6432Node) con DisplayName like 'Synology Drive Client*', comparando DisplayVersion",
+  "notes": "IMPORTANTE - SIN AUTO-UPDATE: A diferencia de Firefox/Chrome, Synology NO ofrece un permalink 'siempre ultima version' para Drive Client -- cada release usa una URL con el numero de version incrustado bajo global.synologydownload.com/download/Utility/SynologyDriveClient/<version>/Windows/Installer/x86_64/. Este install.ps1 apunta a una version FIJA: 4.2.0-20058, confirmada como la mas reciente disponible en el archivo oficial de Synology (archive.synology.com/download/Utility/SynologyDriveClient/) al 2026-08-28. Cuando salga una nueva actualizacion hay que: 1) revisar las versiones listadas en archive.synology.com/download/Utility/SynologyDriveClient/, 2) confirmar el nombre exacto del archivo MSI x64 en esa carpeta, 3) actualizar $downloadUrl en install.ps1 y la version esperada en detect.ps1/uninstall.ps1. No hay hash SHA256 publicado oficialmente por Synology para verificar el binario; en su lugar install.ps1 valida la firma Authenticode del publisher (Synology Inc.). El cliente instala sin requerir datos de la organizacion (direccion del NAS, credenciales); el usuario configura la conexion al servidor la primera vez que abre la app -- eso NO se automatiza desde este script."
 }
