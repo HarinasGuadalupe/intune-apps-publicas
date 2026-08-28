@@ -1,0 +1,11 @@
+{
+  "name": "Mozilla Firefox",
+  "publisher": "Mozilla Corporation",
+  "installer_type": "msi",
+  "architecture": "x64",
+  "source_permalink": "https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=es-MX",
+  "silent_install_args": "/i \"<installer>\" /qn /norestart",
+  "silent_uninstall_args": "resuelto en tiempo de ejecucion desde el registro (ver uninstall.ps1) - el ProductCode del MSI cambia en cada release",
+  "detection_method": "file_version (firefox.exe en Program Files)",
+  "notes": "Permalink oficial de Mozilla (bouncer) para el instalador MSI empresarial, siempre apunta a la ultima version estable. Idioma fijado a es-MX; cambiar el parametro lang= si se requiere otro idioma/region. Como el archivo cambia en cada release, no se fija un hash SHA256 (quedaria obsoleto de inmediato); en su lugar install.ps1 valida la firma Authenticode del publisher (Mozilla Corporation). No requiere ningun dato sensible ni especifico de la organizacion."
+}

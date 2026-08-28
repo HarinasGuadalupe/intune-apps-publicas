@@ -1,0 +1,19 @@
+# Nunca subir secretos, credenciales o binarios pesados a este repo
+
+*.env
+*credential*
+*credentials*
+*secret*
+*.pfx
+*.key
+*.pem
+*password*
+
+# Binarios e instaladores empaquetados (no deben vivir en este repo)
+*.exe
+*.msi
+*.intunewin
+
+# Basura de OS
+.DS_Store
+Thumbs.db
