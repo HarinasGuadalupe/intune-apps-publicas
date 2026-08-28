@@ -1,11 +1,11 @@
 {
-  "name": "",
-  "publisher": "",
-  "installer_type": "",
-  "architecture": "",
-  "source_permalink": "",
-  "silent_install_args": "",
-  "silent_uninstall_args": "",
-  "detection_method": "",
-  "notes": ""
+  "name": "Google Chrome",
+  "publisher": "Google LLC",
+  "installer_type": "msi",
+  "architecture": "x64",
+  "source_permalink": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi",
+  "silent_install_args": "msiexec /i \"<installer>\" /qn /norestart",
+  "silent_uninstall_args": "resuelto en tiempo de ejecucion desde el registro (ver uninstall.ps1) - el ProductCode del MSI cambia en cada release",
+  "detection_method": "presencia + version de archivo (chrome.exe en Program Files\\Google\\Chrome\\Application)",
+  "notes": "Permalink oficial de Google (Chrome Enterprise) para el instalador MSI standalone de 64 bits, siempre apunta a la ultima version estable (confirmado: respuesta HTTP 200, sin cache, Last-Modified reciente al momento de crear este archivo - ver chromeenterprise.google/browser/download/). Como el archivo cambia en cada release, no se fija un hash SHA256 (quedaria obsoleto de inmediato); en su lugar install.ps1 valida la firma Authenticode del publisher (Google LLC). El ProductCode del MSI cambia en cada version, por lo que install.ps1/uninstall.ps1 lo resuelven dinamicamente desde el registro en vez de fijar un GUID. No requiere ningun dato sensible ni especifico de la organizacion."
 }
