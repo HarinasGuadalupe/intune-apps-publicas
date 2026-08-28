@@ -1,11 +1,11 @@
 {
-  "name": "",
-  "publisher": "",
-  "installer_type": "",
-  "architecture": "",
-  "source_permalink": "",
-  "silent_install_args": "",
-  "silent_uninstall_args": "",
-  "detection_method": "",
-  "notes": ""
+  "name": "Adobe Acrobat Reader DC (26.001.21789)",
+  "publisher": "Adobe",
+  "installer_type": "exe",
+  "architecture": "x64",
+  "source_permalink": "https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/2600121789/AcroRdrDCx642600121789_en_US.exe",
+  "silent_install_args": "/sAll /rs /msi EULA_ACCEPT=YES /qn",
+  "silent_uninstall_args": "resuelto en tiempo de ejecucion desde el registro (ver uninstall.ps1) - el ProductCode del MSI cambia en cada release",
+  "detection_method": "registry: HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\* (y WOW6432Node) con DisplayName like 'Adobe Acrobat Reader*', comparando DisplayVersion",
+  "notes": "IMPORTANTE - SIN AUTO-UPDATE: A diferencia de Firefox, Adobe NO ofrece un permalink 'siempre ultima version' para Acrobat Reader DC -- cada release usa una URL con el numero de version incrustado (ver https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/<version>/AcroRdrDCx64<version>_en_US.exe). Este install.ps1 apunta a una version FIJA: 26.001.21789 (build interno 2600121789), release 'out of cycle' del 2026-08-11 segun las release notes oficiales (adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/continuous/dccontinuousjuly2026qfe2.html), confirmada como la mas reciente al 2026-08-28. Cuando salga una nueva actualizacion hay que: 1) revisar la version en las release notes de Adobe, 2) construir el nuevo numero de build sin puntos (ej. 26.001.21789 -> 2600121789), 3) actualizar $downloadUrl en install.ps1 y el patron de version esperado en detect.ps1/uninstall.ps1. No hay hash SHA256 publicado oficialmente por Adobe para verificar el binario; en su lugar install.ps1 valida la firma Authenticode del publisher (Adobe). Argumentos de instalacion silenciosa segun documentacion oficial de Adobe (adobe.com/devnet-docs/acrobatetk/tools/DesktopDeployment/cmdline.html): /sAll (suprime toda la UI), /rs (suprime el reinicio), /msi EULA_ACCEPT=YES /qn (acepta EULA y pasa instalacion silenciosa al MSI interno). Reader es gratuito para uso comercial (a diferencia de Java SE 8u211+), no requiere suscripcion ni Admin Console (a diferencia de Adobe Creative Cloud)."
 }
