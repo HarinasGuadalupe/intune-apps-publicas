@@ -26,13 +26,20 @@ try {
         "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
         "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
     )
-    $expectedDisplayName = "Adobe Acrobat Reader*"
+    # Verificado en un equipo real: la build 2026 se registra como
+    # "Adobe Acrobat (64-bit)", no como "Adobe Acrobat Reader...". Se
+    # deja ese patron como fallback por si una version futura regresa
+    # a ese naming.
+    $expectedDisplayNames = @("Adobe Acrobat (*-bit)", "Adobe Acrobat Reader*")
 
     $entry = $null
     foreach ($path in $uninstallPaths) {
-        $entry = Get-ItemProperty -Path $path -ErrorAction SilentlyContinue |
-            Where-Object { $_.DisplayName -like $expectedDisplayName } |
-            Select-Object -First 1
+        foreach ($namePattern in $expectedDisplayNames) {
+            $entry = Get-ItemProperty -Path $path -ErrorAction SilentlyContinue |
+                Where-Object { $_.DisplayName -like $namePattern } |
+                Select-Object -First 1
+            if ($entry) { break }
+        }
         if ($entry) { break }
     }
 
