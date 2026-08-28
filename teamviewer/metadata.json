@@ -1,11 +1,11 @@
 {
-  "name": "",
-  "publisher": "",
-  "installer_type": "",
-  "architecture": "",
-  "source_permalink": "",
-  "silent_install_args": "",
-  "silent_uninstall_args": "",
-  "detection_method": "",
-  "notes": ""
+  "name": "TeamViewer",
+  "publisher": "TeamViewer Germany GmbH",
+  "installer_type": "exe",
+  "architecture": "x64",
+  "source_permalink": "https://download.teamviewer.com/download/TeamViewer_Setup_x64.exe",
+  "silent_install_args": "/S /ACCEPTEULA=1",
+  "silent_uninstall_args": "resuelto en tiempo de ejecucion desde el registro (ver uninstall.ps1) - usa el uninstaller propio de TeamViewer con /S",
+  "detection_method": "presencia + version de archivo (TeamViewer.exe en Program Files\\TeamViewer)",
+  "notes": "IMPORTANTE - VARIANTE GENERICA, SIN CUENTA: este es el cliente publico generico de TeamViewer (download.teamviewer.com/download/TeamViewer_Setup_x64.exe), sin ningun Company ID / Assignment ID / API Token. Los equipos donde se instale via este script NO apareceran agrupados automaticamente en la Management Console de la organizacion. El paquete MSI 'empresarial' personalizado (con Assignment ID) requiere una licencia Corporate/Tensor y se descarga desde login.teamviewer.com/Design&Deploy -- ese ID/token es un dato propio de la organizacion y NO debe escribirse en este repo publico; si se necesita esa variante, inyectar ASSIGNMENTID/APITOKEN como parametro de Intune fuera de git. El permalink generico confirmado siempre apunta a la ultima version estable (verificado: HTTP 200, Last-Modified reciente). No hay hash SHA256 publicado oficialmente para verificar el binario; en su lugar install.ps1 valida la firma Authenticode del publisher (TeamViewer Germany GmbH)."
 }
