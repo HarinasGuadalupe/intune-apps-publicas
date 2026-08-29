@@ -25,6 +25,9 @@ try {
     $installerPath = Join-Path $env:TEMP "GoogleChromeStandaloneEnterprise64.msi"
 
     # 3. Descargar instalador (con reintentos basicos)
+    #    -TimeoutSec limita cada intento a 2 minutos -- sin esto, un intento
+    #    con problemas de red puede colgarse muchos minutos antes de fallar,
+    #    consumiendo los 3 intentos disponibles con muy poco margen real.
     $maxRetries = 3
     $attempt = 0
     $downloaded = $false
@@ -32,7 +35,7 @@ try {
         $attempt++
         try {
             Write-Log "Intento de descarga $attempt de $maxRetries"
-            Invoke-WebRequest -Uri $downloadUrl -OutFile $installerPath -UseBasicParsing
+            Invoke-WebRequest -Uri $downloadUrl -OutFile $installerPath -UseBasicParsing -TimeoutSec 120
             $downloaded = $true
         } catch {
             Write-Log "Fallo el intento $attempt : $($_.Exception.Message)"
@@ -57,11 +60,26 @@ try {
     }
 
     # 6. Ejecutar instalacion silenciosa
+    #    Si otro MSI se esta instalando al mismo tiempo en el equipo (ej. otra
+    #    app Win32 de Intune asignada al mismo grupo piloto), msiexec devuelve
+    #    1618 (ERROR_INSTALL_ALREADY_RUNNING) en vez de instalar. Se reintenta
+    #    unas cuantas veces con espera antes de darlo por fallido, en lugar de
+    #    depender unicamente del reintento externo (mas lento) de Intune.
     $installArgs = "/i `"$installerPath`" /qn /norestart"
-    Write-Log "Ejecutando: msiexec $installArgs"
-    $process = Start-Process -FilePath "msiexec.exe" -ArgumentList $installArgs -Wait -PassThru
-    $exitCode = $process.ExitCode
-    Write-Log "msiexec finalizo con exit code $exitCode"
+    $maxMsiRetries = 5
+    $msiRetryDelaySeconds = 30
+    $msiAttempt = 0
+    do {
+        $msiAttempt++
+        Write-Log "Ejecutando msiexec (intento $msiAttempt de $maxMsiRetries): $installArgs"
+        $process = Start-Process -FilePath "msiexec.exe" -ArgumentList $installArgs -Wait -PassThru
+        $exitCode = $process.ExitCode
+        Write-Log "msiexec finalizo con exit code $exitCode"
+        if ($exitCode -eq 1618 -and $msiAttempt -lt $maxMsiRetries) {
+            Write-Log "1618 = otra instalacion de Windows Installer en curso; esperando $msiRetryDelaySeconds s antes de reintentar"
+            Start-Sleep -Seconds $msiRetryDelaySeconds
+        }
+    } while ($exitCode -eq 1618 -and $msiAttempt -lt $maxMsiRetries)
 
     # 7. Limpieza
     Remove-Item -Path $installerPath -Force -ErrorAction SilentlyContinue
